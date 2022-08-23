@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymleaf.org">
+
+<head th:replace="fragments/header :: header">
+
+</head>
+
+<body>
+<div class="container">
+    <div th:replace="fragments/bodyHeader :: bodyHeader"/>
+    <div class="jumbotron">
+
+
+        <!--게시물 내용-->
+        <table class="table table-bordered">
+            <thead>
+            <tr class="table-primary">
+                <th scope="col">제목</th>
+                <th scope="col" th:text="${form.title}" style="width:90%;"></th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr class="table-light">
+                <td th:text="${form.content}" style="height:290px;" colspan="2"></td>
+            </tr>
+
+            </tbody>
+
+        </table>
+        <br>
+
+        <!--삭제버튼 & 수정 버튼-->
+        <div class="row justify-content-end">
+            <div class="col-md-2">
+                <a class="px-4 btn btn-primary" th:href="@{/board/edit/{id} (id=${form.id})}" role="button">수정</a>
+            </div>
+            <div class="col-md-2">
+                <a class="px-4 btn btn-danger" th:href="@{/board/remove/{id}(id=${form.id})}" role="button">삭제</a>
+            </div>
+        </div>
+
+    </div>
+    <div th:replace="fragments/footer :: footer"/>
+</div>
+<!--container-->
+
+</body>
+</html>
