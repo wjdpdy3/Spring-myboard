@@ -39,13 +39,10 @@
 </pre>
 
 ### 개발 환경
-  #### < IDE >
   - Intellij
-  #### < Backend >
   - SpringBoot 2.7.2
   - H2 Database 2.1.214
   - Java11
-  #### < Frontend >
   - BootStrap 4.3.1
   
 ### 시연 영상
