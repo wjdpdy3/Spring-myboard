@@ -46,5 +46,5 @@
   - BootStrap 4.3.1
   
 ### 시연 영상
-![JPA-Board-Chrome-2022-08-23-16-36-10](https://user-images.githubusercontent.com/57008901/186101223-a6f35ffb-2995-4aab-9845-728f5aab404b.gif)
+![ezgif com-gif-maker (1)](https://user-images.githubusercontent.com/57008901/186102945-d963a274-4574-4536-a6ed-5f78647e538d.gif)
 
