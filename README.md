@@ -1,6 +1,6 @@
 # Spring-myboard
 
-## version1
+## v1.0.1
 
 ## 소개
   - 간단한 CRUD 기능을 하는 게시판입니다.
