@@ -1,6 +1,7 @@
 package jpaboard.myboard.controller;
 
 import jpaboard.myboard.domain.Board;
+import jpaboard.myboard.repository.BoardSearch;
 import jpaboard.myboard.service.BoardService;
 import jpaboard.myboard.service.UpdateBoardDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,9 +24,13 @@ public class BoardController {
     public final BoardService boardService;
 
     @GetMapping("/")
-    public String home(Model model){
-        List<Board> boards = boardService.findBoards();
-        model.addAttribute("boards", boards);
+    public String home(@ModelAttribute("boardSearch") BoardSearch boardSearch, Model model){
+        List<Board> boards = boardService.findCondBoards(boardSearch);
+        List<BoardForm> formList = boards.stream()
+                .map(board -> new BoardForm(board.getId(), board.getTitle(), board.getLocalDateTime().toLocalDate(), board.getViewCount()))
+                .collect(Collectors.toList());
+        model.addAttribute("boards", formList);
+
         return "home";
     }
 
@@ -48,12 +54,12 @@ public class BoardController {
      */
     @GetMapping("/board/{boardId}")
     public String getBoard(@PathVariable("boardId") Long boardId, Model model){
+        boardService.addViewCount(boardId);
         Board board = boardService.findOne(boardId);
 
-        BoardForm form = new BoardForm();
-        form.setTitle(board.getTitle());
-        form.setContent(board.getContent());
-        form.setId(board.getId());
+
+        BoardForm form = new BoardForm(board.getId(), board.getTitle(), board.getContent(), board.getLocalDateTime(), board.getViewCount());
+        form.setConvertedDate();
 
         model.addAttribute("form", form);
         return "/board/readBoard";

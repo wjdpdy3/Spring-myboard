@@ -11,16 +11,48 @@
 
     <div class="jumbotron">
 
+        <div>
+            <form th:object="${boardSearch}" class="form-inline">
+                <!--검색조건-->
+                <div class="form-group mb-2">
+                    <input type="text" th:field="*{keyword}" class="form-control" placeholder="검색명"/>
+                </div>
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{boardSearchCond}" class="form-control">
+                        <option value="">검색조건</option>
+                        <option th:each="cond : ${T(jpaboard.myboard.repository.BoardSearchCond).values()}"
+                                th:if="${cond.toString()} == 'TITLE'"
+                                th:value="${cond}"
+                                th:text="제목">
+                        </option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary mb-2 ml-3"
+                        style="padding:3px 15px; font-size:18px;">검색
+                </button>
 
-        <!--    등록 버튼-->
-        <div class="row">
-            <div class="col-sm-2">
-                <a class="btn btn-primary" href="/new" role="button">등록</a>
-            </div>
+                <!--정렬조건-->
+                <div class="form-group mx-sm-1 mb-2">
+                    <select th:field="*{boardOrderCond}" class="form-control" onchange="this.form.submit()">
+                        <option th:each="cond : ${T(jpaboard.myboard.repository.BoardOrderCond).values()}"
+                                th:if="${cond.toString()} == 'NEW'"
+                                th:value="${cond}"
+                                th:text="최신순"></option>
+                        <option th:each="cond : ${T(jpaboard.myboard.repository.BoardOrderCond).values()}"
+                                th:if="${cond.toString()} == 'OLD'"
+                                th:value="${cond}"
+                                th:text="오래된순"></option>
+                        <option th:each="cond : ${T(jpaboard.myboard.repository.BoardOrderCond).values()}"
+                                th:if="${cond.toString()} == 'VIEWCOUNT'"
+                                th:value="${cond}"
+                                th:text="조회순"></option>
+                    </select>
+                </div>
+            </form>
         </div>
-        <br>
 
-        <!--        게시판 테이블-->
+
+        <!--게시판 테이블-->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold text-primary">글목록</h6>
@@ -29,20 +61,32 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col">글번호</th>
-                        <th scope="col">제목</th>
+                        <th class="col-md-1 text-center">글번호</th>
+                        <th class="col-md-auto text-center">제목</th>
+                        <th class="col-md-1 text-center">조회수</th>
+                        <th class="col-md-3 text-center">작성일</th>
                     </tr>
                     </thead>
 
                     <tbody>
                     <tr th:each="board : ${boards}" th:onclick="'location.href=\'board/' + @{${board.id}} + '\''">
-                        <td th:text="${board.id}"></td>
-                        <td th:text="${board.title}"></td>
+                        <td class="text-center" th:text="${board.id}"></td>
+                        <td class="text-center" th:text="${board.title}"></td>
+                        <td class="text-center" th:text="${board.viewCount}"></td>
+                        <td class="text-center" th:text="${board.localDate}"></td>
                     </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+
+        <!--등록 버튼-->
+        <div class="row justify-content-end">
+            <div class="col-md-2">
+                <a class="btn btn-primary" href="/new" role="button">등록</a>
+            </div>
+        </div>
+        <br>
 
     </div>
     <div th:replace="fragments/footer :: footer"/>

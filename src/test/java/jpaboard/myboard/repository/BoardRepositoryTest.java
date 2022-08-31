@@ -2,8 +2,7 @@ package jpaboard.myboard.repository;
 
 import jpaboard.myboard.domain.Board;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -13,9 +12,9 @@ import javax.persistence.EntityManager;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+
 @SpringBootTest
 @Transactional
 public class BoardRepositoryTest {
@@ -29,7 +28,7 @@ public class BoardRepositoryTest {
         Board board = new Board("제목", "내용");
         boardRepository.save(board);
         Board findBoard = em.find(Board.class, board.getId());
-        Assertions.assertThat(findBoard).isEqualTo(board);
+        assertThat(findBoard).isEqualTo(board);
     }
 
     @Test
@@ -45,10 +44,10 @@ public class BoardRepositoryTest {
         //then
         //단건 조회
         Board findBoard = boardRepository.findOne(board1.getId());
-        Assertions.assertThat(board1).isEqualTo(findBoard);
+        assertThat(board1).isEqualTo(findBoard);
 
         //전부 조회
-        List<Board> findBoards = boardRepository.findAll();
+        List<Board> findBoards = boardRepository.findAllOld();
         for (Board board : findBoards) {
             System.out.println("board = " + board);
         }
@@ -66,6 +65,35 @@ public class BoardRepositoryTest {
         boardRepository.remove(board.getId());
         Long countResult = em.createQuery("select count(b) from Board b", Long.class)
                 .getSingleResult();
-        Assertions.assertThat(countResult).isEqualTo(count-1);
+        assertThat(countResult).isEqualTo(count-1);
+    }
+
+    @Test
+    public void 검색조건_find() throws Exception{
+        //given
+        Board board1 = new Board("어린왕자", "1234");
+        Board board2 = new Board("Java의 정석", "1111");
+        em.persist(board1);
+        em.persist(board2);
+
+        //when
+        List<Board> findBoards = boardRepository.findAll(new BoardSearch("어린왕자", BoardSearchCond.TITLE));
+
+        //then
+        assertThat(findBoards.size()).isEqualTo(1);
+        assertThat(findBoards.get(0)).isEqualTo(board1);
+
+    }
+
+    @Test
+    public void orderFind() throws Exception{
+        //given
+        BoardSearch boardSearch = new BoardSearch("제목", BoardSearchCond.TITLE, BoardOrderCond.OLD);
+        //when
+        List<Board> result = boardRepository.findAll(boardSearch);
+        //then
+        for (Board board : result) {
+            System.out.println("board = " + board);
+        }
     }
 }

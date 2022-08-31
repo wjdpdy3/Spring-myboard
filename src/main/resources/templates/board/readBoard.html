@@ -14,15 +14,23 @@
         <!--게시물 내용-->
         <table class="table table-bordered">
             <thead>
-            <tr class="table-primary">
-                <th scope="col">제목</th>
-                <th scope="col" th:text="${form.title}" style="width:90%;"></th>
+            <tr class="table-success">
+                <th class="col-md-1">제목</th>
+                <th colspan="3" class="col-md-auto text-center" th:text="${form.title}"></th>
             </tr>
+
+            <tr class="table-success">
+                <th class="col-md-1">작성일자</th>
+                <th class="col-md-auto text-center" th:text="${form.convertedDate}"></th>
+                <th class="col-md-1">조회수</th>
+                <th class="col-md-1 text-center" th:text="${form.viewCount}"></th>
+            </tr>
+
             </thead>
 
             <tbody>
             <tr class="table-light">
-                <td th:text="${form.content}" style="height:290px;" colspan="2"></td>
+                <td colspan="4" th:text="${form.content}" style="height:290px;" ></td>
             </tr>
 
             </tbody>
@@ -36,7 +44,7 @@
                 <a class="px-4 btn btn-primary" th:href="@{/board/edit/{id} (id=${form.id})}" role="button">수정</a>
             </div>
             <div class="col-md-2">
-                <a class="px-4 btn btn-danger" th:href="@{/board/remove/{id}(id=${form.id})}" role="button">삭제</a>
+                <a class="px-4 btn btn-danger" th:href="@{/board/remove/{id} (id=${form.id})}" role="button">삭제</a>
             </div>
         </div>
 

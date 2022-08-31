@@ -2,6 +2,7 @@ package jpaboard.myboard.service;
 
 import jpaboard.myboard.domain.Board;
 import jpaboard.myboard.repository.BoardRepository;
+import jpaboard.myboard.repository.BoardSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,11 +30,17 @@ public class BoardService {
      */
     // 전체 조회
     public List<Board> findBoards(){
-        return boardRepository.findAll();
+        return boardRepository.findAllOld();
     }
+
     // 단건 조회
     public Board findOne(Long boardId){
         return boardRepository.findOne(boardId);
+    }
+
+    //검색 조회
+    public List<Board> findCondBoards(BoardSearch boardSearch){
+        return boardRepository.findAll(boardSearch);
     }
 
     /**
@@ -53,5 +60,11 @@ public class BoardService {
         Board findBoard = boardRepository.findOne(boardId);
         Board changeBoard = findBoard.changeBoard(updateBoardDto.getTitle(), updateBoardDto.getContent());
         return changeBoard;
+    }
+
+    @Transactional
+    public void addViewCount(Long boardId){
+        Board findBoard = boardRepository.findOne(boardId);
+        findBoard.addViewCount();
     }
 }
